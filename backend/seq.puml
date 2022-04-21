@@ -1,0 +1,46 @@
+@startuml sequence
+
+
+!define extSystem #999999
+
+participant "Frontend" as ui
+participant "API Gateway" as gw
+participant "Backend" as backend
+participant "App ID" as appid extSystem
+participant "Watson NLU" as watson extSystem
+autonumber
+
+== Transcribe ==
+ui -> gw: POST /transcribe/upload-audio
+activate gw
+gw -> appid: Check Authentication header against App Id
+activate appid
+return 200 OK : Token is valid
+gw -> backend: POST /transcribe/upload-audio
+activate backend
+backend -> watson: Perform STT
+activate watson
+return JSON SST
+note left of watson: Consider timeout in API gateway.
+... 1 minute later ...
+backend --> backend: convert JSON to CSV
+return CSV file
+return CSV file
+== Analyse & Report == 
+
+ui -> gw: POST /analyse/upload-transcript
+activate gw
+gw -> appid: Check Authentication header against App Id
+activate appid
+return 200 OK : Token is valid
+gw -> backend: POST /analyse/upload-transcript
+activate backend
+backend -> watson: Perform NLU
+activate watson
+return JSON NLU data
+note left of watson: Consider timeout in API gateway.
+... 1 minute later ...
+backend --> backend: convert JSON to Excel & PDF report
+return ZIP file
+return ZIP file
+@enduml

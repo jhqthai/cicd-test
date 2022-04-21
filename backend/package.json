@@ -1,0 +1,9 @@
+{
+  "name": "dew-backend-versioning",
+  "version": "0.0.6",
+  "description": "This file is used only for versioning to avoid a full npm install and take advantage of docker caching to speed up image builds.",
+  "buildTime": "14/04/2022 02:13:54 PM",
+  "devDependencies": {
+    "replace-json-property": "^1.8.0"
+  }
+}
